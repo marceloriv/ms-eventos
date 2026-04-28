@@ -1,24 +1,21 @@
 package com.ticketti.ms_eventos.model;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name= "Evento")
+@Table(name= "Recinto")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Evento {
+public class Recinto {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
@@ -26,25 +23,6 @@ public class Evento {
     @Column(nullable= false, length= 50)
     private String nombre;
 
-    @Column(nullable= false, length= 200)
-    private String descripcion;
-
-    @Column(nullable= false)
-    private Date fecha;
-
-   // @Column(nullable= false, length= 50)
-   // private String categoria; //factory method
-
     @Column(nullable= false, length= 50)
-    @OneToOne
-    private Recinto recinto; 
-
-    @Column(nullable= false)
-    private Integer aforo; //temporal
-
-    @Column(nullable= false)
-    private Integer stock; //temporal
-
-    @Column(nullable= false)
-    private Double precioEntrada; 
+    private String ubicacion;
 }
