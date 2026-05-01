@@ -11,18 +11,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name= "Recinto")
+@Table(name = "Recinto")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Recinto {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable= false, length= 50)
+    @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable= false, length= 50)
+    @Column(nullable = false, length = 50)
     private String ubicacion;
 }
