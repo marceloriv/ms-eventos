@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,17 +40,16 @@ public class Evento {
     @Column(length = 20)
     private Genero genero;
 
-    // @Column(nullable= false, length= 50)
-    // private String categoria; //factory method
-
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER) //Recinto siempre junto con Evento,
+    //se agrega ya que hibernate por defecto carga las relaciones de forma lazy, lo que es, 
+    //no carga hasta que realmente le pides que lo haga con EAGER.
     private Recinto recinto;
 
     @Column(nullable = false)
-    private Integer aforo; // temporal
+    private Integer aforo; 
 
     @Column(nullable = false)
-    private Integer stock; // temporal
+    private Integer stock; 
 
     @Column(nullable = false)
     private Double precioEntrada;

@@ -80,6 +80,7 @@ public class EventoController {
 
     /**
      * Método para que cuando se compre una entrada, se reste del stock.
+     * Este método es consumido por RabbitMQ y por lógica.
      */
     @PatchMapping("/actualizarStock/{id}/{cantidad}")
     public ResponseEntity<Void> actualizarStock(@PathVariable Integer id, @PathVariable Integer cantidad) {
