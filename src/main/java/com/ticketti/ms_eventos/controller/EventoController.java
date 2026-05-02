@@ -2,15 +2,16 @@ package com.ticketti.ms_eventos.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketti.ms_eventos.model.Evento;
+import com.ticketti.ms_eventos.model.Genero;
 import com.ticketti.ms_eventos.service.EventoService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,14 +27,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping("/api/v0/Eventos")
 @RequiredArgsConstructor
 public class EventoController {
-    @Autowired
+
     private EventoService eventoService;
 
     /**
      * Guarda un nuevo evento.
      */
-    @PostMapping("path")
-    public ResponseEntity<Evento> save(Evento evento) {
+    @PostMapping("/crear")
+    public ResponseEntity<Evento> save(@RequestBody Evento evento) {
         Evento nuevoEvento = eventoService.guardarEvento(evento);
         return ResponseEntity.ok(nuevoEvento);
     }
@@ -96,5 +97,27 @@ public class EventoController {
     @GetMapping("/stock/{check}")
     public String revisarStock() {
         return eventoService.revisarStock();
+    }
+
+    // GET para busacr por genero, nombre, categoría y ubicación.
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Evento>> buscar(
+            @RequestParam(required = false) Genero genero,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String ubicacion) {
+        List<Evento> eventos = eventoService.buscarEventos(genero, nombre, ubicacion);
+        if (eventos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(eventos);
+    }
+
+    // PATCH para cambiar el estado del evento.
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<Void> cambiarEstado(
+            @PathVariable Integer id,
+            @RequestParam String estado) {
+        eventoService.cambiarEstado(id, estado);
+        return ResponseEntity.noContent().build();
     }
 }

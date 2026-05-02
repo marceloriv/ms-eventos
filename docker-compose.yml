@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+
+  ms-eventos:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/eventos
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - db
+      - rabbitmq
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: eventos
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"

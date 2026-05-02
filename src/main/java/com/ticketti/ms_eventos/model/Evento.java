@@ -40,16 +40,21 @@ public class Evento {
     @Column(length = 20)
     private Genero genero;
 
-    @OneToOne(fetch = FetchType.EAGER) //Recinto siempre junto con Evento,
-    //se agrega ya que hibernate por defecto carga las relaciones de forma lazy, lo que es, 
-    //no carga hasta que realmente le pides que lo haga con EAGER.
+    @OneToOne(fetch = FetchType.EAGER) // Recinto siempre junto con Evento,
+    // se agrega ya que hibernate por defecto carga las relaciones de forma lazy, lo
+    // que es,
+    // no carga hasta que realmente le pides que lo haga con EAGER.
     private Recinto recinto;
 
-    @Column(nullable = false)
-    private Integer aforo; 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private Estado estado;
 
     @Column(nullable = false)
-    private Integer stock; 
+    private Integer aforo;
+
+    @Column(nullable = false)
+    private Integer stock;
 
     @Column(nullable = false)
     private Double precioEntrada;
