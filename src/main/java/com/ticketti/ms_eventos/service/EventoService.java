@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.ticketti.ms_eventos.categorias.Categoria;
 import com.ticketti.ms_eventos.factory.CategoriaFactory;
+import com.ticketti.ms_eventos.model.Estado;
 import com.ticketti.ms_eventos.model.Evento;
+import com.ticketti.ms_eventos.model.Genero;
 import com.ticketti.ms_eventos.repository.EventoRepository;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -20,9 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventoService {
 
-    private EventoRepository eventoRepository;
+    private final EventoRepository eventoRepository;
     private final CategoriaFactory fabrica;
-    private final EntradaProducer entradaProducer; 
+    private final EntradaProducer entradaProducer;
     private final Random random = new Random();
 
     /**
@@ -94,5 +96,19 @@ public class EventoService {
         return "Servicio no disponible actualmente";
     }
 
+    // Buscar con filtros genero, nombre, categoría y ubicación.
+    public List<Evento> buscarEventos(Genero genero, String nombre, String ubicacion) {
+        return eventoRepository.buscarPorFiltros(genero, nombre, ubicacion);
+    }
+
+    // Método para cambiar el estado del evento, para el organizador.
+    public void cambiarEstado(Integer id, String estado) {
+        Optional<Evento> optionalEvento = eventoRepository.findById(id);
+        if (optionalEvento.isPresent()) {
+            Evento evento = optionalEvento.get();
+            evento.setEstado(Estado.valueOf(estado.toUpperCase()));
+            eventoRepository.save(evento);
+        }
+    }
 
 }

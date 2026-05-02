@@ -1,7 +1,7 @@
 package com.ticketti.ms_eventos.model;
 
 public enum Genero {
-    kpop, pop, reggaeton, rock, metal, rnb, jazz,
-    terror, drama, accion, comedia, romance, parodia,
-    gastronomia, arte, folclore, artesania
+    KPOP, POP, REGGAETOM, ROCK, METAL, RNB, JAZZ, INDIE,
+    TERROR, DRAMA, ACCION, COMEDIA, ROMANCE, PARODIA,
+    GASTRONOMIA, ARTE, FOLCLORE, ARTESANIA
 }

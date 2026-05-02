@@ -2,7 +2,9 @@ package com.ticketti.ms_eventos.dto;
 
 import java.util.Date;
 
+import com.ticketti.ms_eventos.model.Estado;
 import com.ticketti.ms_eventos.model.Genero;
+import com.ticketti.ms_eventos.model.Recinto;
 
 import lombok.Data;
 
@@ -13,6 +15,7 @@ public class EventoDTO {
     private String descripcion;
     private Date fecha;
     private Genero genero;
-    private String recinto;
+    private Recinto recinto;
+    private Estado estado;
     private Double precioEntrada;
 }
