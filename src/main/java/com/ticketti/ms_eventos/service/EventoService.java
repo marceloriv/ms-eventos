@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ticketti.ms_eventos.categorias.Categoria;
@@ -14,17 +13,16 @@ import com.ticketti.ms_eventos.repository.EventoRepository;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class EventoService {
-    @Autowired
+
     private EventoRepository eventoRepository;
     private final CategoriaFactory fabrica;
+    private final EntradaProducer entradaProducer; 
     private final Random random = new Random();
 
     /**
@@ -72,6 +70,8 @@ public class EventoService {
             Integer nuevoStock = evento.getStock() - cantidad;
             evento.setStock(nuevoStock);
             eventoRepository.save(evento);
+
+            entradaProducer.enviarEntradaComprada(evento); // ← agregar
         }
     }
 
@@ -93,4 +93,6 @@ public class EventoService {
     public String fallbackStock(Throwable throwable) {
         return "Servicio no disponible actualmente";
     }
+
+
 }
