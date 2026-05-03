@@ -99,7 +99,7 @@ public class EventoController {
         return eventoService.revisarStock();
     }
 
-    // GET para busacr por genero, nombre, categoría y ubicación.
+    // GET para busacr por genero, nombre y ubicación.
     @GetMapping("/buscar")
     public ResponseEntity<List<Evento>> buscar(
             @RequestParam(required = false) Genero genero,
