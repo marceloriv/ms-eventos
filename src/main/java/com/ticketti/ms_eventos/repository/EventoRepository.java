@@ -14,7 +14,7 @@ import com.ticketti.ms_eventos.model.Genero;
 public interface EventoRepository extends JpaRepository<Evento, Integer> {
         // PARA EL MÉTODO BUSCAR, YA QUE TIENE UNA RELACIÓN CON RECINTO, Y SE NECESITA
         // LA UBICACIÓN
-        // ESTE MÉTODO BUSCA POR: GÉNERO, NOMBRE, CATEGORÍA, UBICACIÓN.
+        // ESTE MÉTODO BUSCA POR: GÉNERO, NOMBRE, UBICACIÓN.
         @Query("SELECT e FROM Evento e WHERE " +
                         "(:genero IS NULL OR e.genero = :genero) AND " +
                         "(:nombre IS NULL OR LOWER(e.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +

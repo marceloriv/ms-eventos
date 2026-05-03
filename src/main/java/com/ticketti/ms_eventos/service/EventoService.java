@@ -96,7 +96,7 @@ public class EventoService {
         return "Servicio no disponible actualmente";
     }
 
-    // Buscar con filtros genero, nombre, categoría y ubicación.
+    // Buscar con filtros genero, nombre y ubicación.
     public List<Evento> buscarEventos(Genero genero, String nombre, String ubicacion) {
         return eventoRepository.buscarPorFiltros(genero, nombre, ubicacion);
     }
