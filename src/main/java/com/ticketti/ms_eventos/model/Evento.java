@@ -14,6 +14,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,26 +47,39 @@ public class Evento {
     @Column(length = 20)
     private Genero genero;
 
-    // @OneToOne(fetch = FetchType.EAGER) // Recinto siempre junto con Evento,
-    // se agrega ya que hibernate por defecto carga las relaciones de forma lazy, lo
-    // que es,
-    // no carga hasta que realmente le pides que lo haga con EAGER.
-
+    /** @OneToOne(fetch = FetchType.EAGER) // Recinto siempre junto con Evento,
+    * se agrega ya que hibernate por defecto carga las relaciones de forma lazy, lo
+    * que es,
+    * no carga hasta que realmente le pides que lo haga con EAGER.
+    * también, ya que los JSON se harán con recinto dentro, este tiene que correr
+    * en cascada, porque sino, hibernate corre evento sin primero ir a guardar un recinto.
+    */
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Recinto recinto;
     // private Recinto recinto;
-
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private Estado estado;
 
+    /**
+     * fix general: validaciones de valores en blanco,
+     * not null para números,
+     * y no se pueden poner valores numericos negativos.
+     */
+
     @Column(nullable = false)
+    @NotNull
+    @Positive
     private Integer aforo;
 
     @Column(nullable = false)
+    @NotNull
+    @PositiveOrZero
     private Integer stock;
 
     @Column(nullable = false)
+    @NotNull
+    @Positive
     private Double precioEntrada;
 }

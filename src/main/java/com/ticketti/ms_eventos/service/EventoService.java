@@ -29,8 +29,12 @@ public class EventoService {
 
     /**
      * Guarda un nuevo evento.
+     * fix: se podía poner más stock que aforo, ahora no.
      */
     public Evento guardarEvento(Evento evento) {
+        if (evento.getStock() > evento.getAforo()) {
+            throw new IllegalArgumentException("El stock no puede ser mayor al aforo");
+        }
         return eventoRepository.save(evento);
     }
 
@@ -43,8 +47,12 @@ public class EventoService {
 
     /**
      * Actualiza un evento existente.
+     * fix: se podía poner más stock que aforo, ahora no.
      */
     public Evento actualizarEvento(Evento evento) {
+        if (evento.getStock() > evento.getAforo()) {
+            throw new IllegalArgumentException("El stock no puede ser mayor al aforo");
+        }
         return eventoRepository.save(evento);
     }
 
@@ -64,16 +72,22 @@ public class EventoService {
 
     /**
      * Método para que cuando se compre una entrada, se reste del stock.
+     * si se agrega más stock que el aforo, tira error de stock insuficiente
+     * ya que stock no puede ser mayor que aforo.
      */
     public void actualizarStock(Integer id, Integer cantidad) {
         Optional<Evento> optionalEvento = eventoRepository.findById(id);
         if (optionalEvento.isPresent()) {
             Evento evento = optionalEvento.get();
             Integer nuevoStock = evento.getStock() - cantidad;
+
+            if (nuevoStock < 0) {
+                throw new IllegalArgumentException("Stock insuficiente para realizar la operación");
+            }
+
             evento.setStock(nuevoStock);
             eventoRepository.save(evento);
-
-            entradaProducer.enviarEntradaComprada(evento); // ← agregar
+            entradaProducer.enviarEntradaComprada(evento);
         }
     }
 
