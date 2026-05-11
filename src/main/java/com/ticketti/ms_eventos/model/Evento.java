@@ -32,6 +32,9 @@ public class Evento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = 255)
+    private String imagenUrl;
+
     @Column(nullable = false, length = 50)
     @NotBlank
     private String nombre;
@@ -47,13 +50,17 @@ public class Evento {
     @Column(length = 20)
     private Genero genero;
 
-    /** @OneToOne(fetch = FetchType.EAGER) // Recinto siempre junto con Evento,
-    * se agrega ya que hibernate por defecto carga las relaciones de forma lazy, lo
-    * que es,
-    * no carga hasta que realmente le pides que lo haga con EAGER.
-    * también, ya que los JSON se harán con recinto dentro, este tiene que correr
-    * en cascada, porque sino, hibernate corre evento sin primero ir a guardar un recinto.
-    */
+    /**
+     * @OneToOne(fetch = FetchType.EAGER) // Recinto siempre junto con Evento,
+     *                 se agrega ya que hibernate por defecto carga las relaciones
+     *                 de forma lazy, lo
+     *                 que es,
+     *                 no carga hasta que realmente le pides que lo haga con EAGER.
+     *                 también, ya que los JSON se harán con recinto dentro, este
+     *                 tiene que correr
+     *                 en cascada, porque sino, hibernate corre evento sin primero
+     *                 ir a guardar un recinto.
+     */
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Recinto recinto;
     // private Recinto recinto;
