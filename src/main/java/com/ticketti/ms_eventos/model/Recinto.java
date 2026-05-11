@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,10 @@ public class Recinto {
     private Integer id;
 
     @Column(nullable = false, length = 50)
+    @NotBlank
     private String nombre;
 
     @Column(nullable = false, length = 50)
+    @NotBlank
     private String ubicacion;
 }

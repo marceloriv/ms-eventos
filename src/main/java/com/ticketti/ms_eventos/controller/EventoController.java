@@ -2,13 +2,14 @@ package com.ticketti.ms_eventos.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import com.ticketti.ms_eventos.model.Evento;
 import com.ticketti.ms_eventos.model.Genero;
 import com.ticketti.ms_eventos.service.EventoService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -28,16 +30,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventoController {
 
-    @Autowired
-    private EventoService eventoService;
+    private final EventoService eventoService;
 
     /**
      * Guarda un nuevo evento.
      */
     @PostMapping("/crear")
-    public ResponseEntity<Evento> save(@RequestBody Evento evento) {
-        Evento nuevoEvento = eventoService.guardarEvento(evento);
-        return ResponseEntity.ok(nuevoEvento);
+    public ResponseEntity<Evento> save(@Valid @RequestBody Evento evento) {
+        return ResponseEntity.ok(eventoService.guardarEvento(evento));
     }
 
     /**
@@ -55,8 +55,9 @@ public class EventoController {
     /**
      * Actualiza un evento existente.
      */
-    @PatchMapping("/actualizarEvento/{id}")
-    public ResponseEntity<Evento> updateEvento(Evento evento) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Evento> updateEvento(@PathVariable Integer id, @Valid @RequestBody Evento evento) {
+        evento.setId(id);
         Evento nuevoEvento = eventoService.actualizarEvento(evento);
         return ResponseEntity.ok(nuevoEvento);
     }
@@ -98,6 +99,12 @@ public class EventoController {
     @GetMapping("/stock/{check}")
     public String revisarStock() {
         return eventoService.revisarStock();
+    }
+
+    // para el método de validación, donde stock no puede ser mayor que aforo
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     // GET para busacr por genero, nombre y ubicación.
