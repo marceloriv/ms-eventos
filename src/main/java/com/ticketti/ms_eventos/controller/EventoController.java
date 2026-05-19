@@ -53,7 +53,7 @@ public class EventoController {
     }
 
     /**
-     * Actualiza un evento existente.
+     * Actualiza un evento existente, por Id.
      */
     @PutMapping("/{id}")
     public ResponseEntity<Evento> updateEvento(@PathVariable Integer id, @Valid @RequestBody Evento evento) {
@@ -91,23 +91,29 @@ public class EventoController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Endpoint para patrón factory method implementado, confirma qué categoría fue instanciada.
+     */
     @PostMapping("/categoria/{tipo}")
     public String mandarCategoria(@PathVariable String tipo, @RequestBody String mensaje) {
         return eventoService.mandarCategoria(tipo, mensaje);
     }
 
+    /**
+     * Revisa el stock de un evento.
+     */
     @GetMapping("/stock/{check}")
     public String revisarStock() {
         return eventoService.revisarStock();
     }
 
-    // para el método de validación, donde stock no puede ser mayor que aforo
+    // Manejo de Excepción para el método de validación, donde stock no puede ser mayor que aforo.
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    // GET para busacr por genero, nombre y ubicación.
+    // GET para buscar por genero, nombre y ubicación.
     @GetMapping("/buscar")
     public ResponseEntity<List<Evento>> buscar(
             @RequestParam(required = false) Genero genero,
@@ -120,7 +126,10 @@ public class EventoController {
         return ResponseEntity.ok(eventos);
     }
 
-    // PATCH para cambiar el estado del evento.
+    /** 
+     * Cambia el estado del evento (publicado, cancelado). 
+     * Cancelación sólo Organizador.
+    */ 
     @PatchMapping("/{id}/estado")
     public ResponseEntity<Void> cambiarEstado(
             @PathVariable Integer id,
