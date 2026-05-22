@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -105,12 +104,6 @@ public class EventoController {
     @GetMapping("/stock/{check}")
     public String revisarStock() {
         return eventoService.revisarStock();
-    }
-
-    // Manejo de Excepción para el método de validación, donde stock no puede ser mayor que aforo.
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     // GET para buscar por genero, nombre y ubicación.
