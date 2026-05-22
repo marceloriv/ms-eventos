@@ -91,11 +91,27 @@ public class EventoService {
         }
     }
 
+    /**
+     * Método que expone el patrón Factory Method implementado en la capa de dominio
+     * y confirma qué categoría fue instanciada.
+     */
     public String mandarCategoria(String tipo, String mensaje) {
         Categoria cat = fabrica.obtenerCategoria(tipo);
         return cat.mandarMensaje(mensaje);
     }
 
+    /**
+     * Método protegido con Circuit Breaker.
+     * Simula fallos aleatorios:
+     * 7 de cada 10 llamadas lanzan excepción.
+     *
+     * Configuración:
+     * - slidingWindowSize: 10
+     * - failureRateThreshold: 50
+     * - minimumNumberOfCalls: 3
+     * - waitDurationInOpenState: 10s
+     * - permittedNumberOfCallsInHalfOpenState: 5
+     */
     @CircuitBreaker(name = "stockService", fallbackMethod = "fallbackStock")
     public String revisarStock() {
         int valor = random.nextInt(10);
@@ -106,6 +122,10 @@ public class EventoService {
         return "Conexión exitosa";
     }
 
+    /**
+     * Método en que fallback tiene un lanzable, y retorna un mensaje,
+     * en este caso; el de servicio no disponible.
+     */
     public String fallbackStock(Throwable throwable) {
         return "Servicio no disponible actualmente";
     }
