@@ -91,14 +91,6 @@ public class EventoController {
     }
 
     /**
-     * Endpoint para patrón factory method implementado, confirma qué categoría fue instanciada.
-     */
-    @PostMapping("/categoria/{tipo}")
-    public String mandarCategoria(@PathVariable String tipo, @RequestBody String mensaje) {
-        return eventoService.mandarCategoria(tipo, mensaje);
-    }
-
-    /**
      * Revisa el stock de un evento.
      */
     @GetMapping("/stock/{check}")

@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.ticketti.ms_eventos.repository.EventoRepository;
 import com.ticketti.ms_eventos.model.Evento;
-import com.ticketti.ms_eventos.factory.CategoriaFactory;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -20,9 +19,6 @@ class EventoServiceTest {
 
     @Mock
     private EntradaProducer entradaProducer;
-
-    @Mock
-    private CategoriaFactory fabrica;
 
     @InjectMocks
     private EventoService eventoService;

@@ -6,8 +6,6 @@ import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
-import com.ticketti.ms_eventos.categorias.Categoria;
-import com.ticketti.ms_eventos.factory.CategoriaFactory;
 import com.ticketti.ms_eventos.model.Estado;
 import com.ticketti.ms_eventos.model.Evento;
 import com.ticketti.ms_eventos.model.Genero;
@@ -23,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class EventoService {
 
     private final EventoRepository eventoRepository;
-    private final CategoriaFactory fabrica;
     private final EntradaProducer entradaProducer;
     private final Random random = new Random();
 
@@ -89,15 +86,6 @@ public class EventoService {
             eventoRepository.save(evento);
             entradaProducer.enviarEntradaComprada(evento);
         }
-    }
-
-    /**
-     * Método que expone el patrón Factory Method implementado en la capa de dominio
-     * y confirma qué categoría fue instanciada.
-     */
-    public String mandarCategoria(String tipo, String mensaje) {
-        Categoria cat = fabrica.obtenerCategoria(tipo);
-        return cat.mandarMensaje(mensaje);
     }
 
     /**
