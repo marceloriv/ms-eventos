@@ -2,8 +2,8 @@ package com.ticketti.ms_eventos.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,12 +20,12 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public TopicExchange exchangeEventos() {
-        return new TopicExchange(COLA_EXCHANGE);
+    public DirectExchange exchangeEventos() {
+        return new DirectExchange(COLA_EXCHANGE, true, false);
     }
 
     @Bean
-    public Binding bindingEventos(Queue colaEventos, TopicExchange intermediario) {
+    public Binding bindingEventos(Queue colaEventos, DirectExchange intermediario) {
         return BindingBuilder.bind(colaEventos).to(intermediario).with(ROUTING_KEY_EVENTOS);
     }
 }
