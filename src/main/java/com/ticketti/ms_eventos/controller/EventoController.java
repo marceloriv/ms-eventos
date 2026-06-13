@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -84,9 +84,18 @@ public class EventoController {
      * Método para que cuando se compre una entrada, se reste del stock. Este
      * método es consumido por RabbitMQ y por lógica.
      */
-    @PatchMapping("/actualizarStock/{id}/{cantidad}")
+    @PutMapping("/actualizarStock/{id}/{cantidad}")
     public ResponseEntity<Void> actualizarStock(@PathVariable Integer id, @PathVariable Integer cantidad) {
         eventoService.actualizarStock(id, cantidad);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Método para restaurar stock cuando se libera una reserva.
+     */
+    @PutMapping("/restaurarStock/{id}/{cantidad}")
+    public ResponseEntity<Void> restaurarStock(@PathVariable Integer id, @PathVariable Integer cantidad) {
+        eventoService.restaurarStock(id, cantidad);
         return ResponseEntity.noContent().build();
     }
 
@@ -115,7 +124,7 @@ public class EventoController {
      * Cambia el estado del evento (publicado, cancelado). 
      * Cancelación sólo Organizador.
     */ 
-    @PatchMapping("/{id}/estado")
+    @PutMapping("/{id}/estado")
     public ResponseEntity<Void> cambiarEstado(
             @PathVariable Integer id,
             @RequestParam String estado) {
