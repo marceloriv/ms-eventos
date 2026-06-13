@@ -89,6 +89,18 @@ public class EventoService {
     }
 
     /**
+     * Método para restaurar el stock si la reserva se libera.
+     */
+    public void restaurarStock(Integer id, Integer cantidad) {
+        Optional<Evento> optionalEvento = eventoRepository.findById(id);
+        if (optionalEvento.isPresent()) {
+            Evento evento = optionalEvento.get();
+            evento.setStock(evento.getStock() + cantidad);
+            eventoRepository.save(evento);
+        }
+    }
+
+    /**
      * Método protegido con Circuit Breaker.
      * Simula fallos aleatorios:
      * 7 de cada 10 llamadas lanzan excepción.
