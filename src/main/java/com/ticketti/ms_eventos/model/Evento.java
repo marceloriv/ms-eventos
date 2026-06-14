@@ -89,4 +89,7 @@ public class Evento {
     @NotNull
     @Positive
     private Double precioEntrada;
+
+    @Column(name = "causa_social_id", nullable = true)
+    private Long causaSocialId;
 }

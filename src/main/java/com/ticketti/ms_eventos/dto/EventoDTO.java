@@ -18,4 +18,5 @@ public class EventoDTO {
     private Recinto recinto;
     private Estado estado;
     private Double precioEntrada;
+    private Long causaSocialId;
 }
