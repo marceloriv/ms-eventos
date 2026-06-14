@@ -35,7 +35,13 @@ public class EventoController {
      * Guarda un nuevo evento.
      */
     @PostMapping("/crear")
-    public ResponseEntity<Evento> save(@Valid @RequestBody Evento evento) {
+    public ResponseEntity<Evento> save(
+            @Valid @RequestBody Evento evento,
+            @org.springframework.web.bind.annotation.RequestHeader(value = "X-Usuario-Id", required = false) Long organizadorId
+    ) {
+        if (organizadorId != null) {
+            evento.setOrganizadorId(organizadorId);
+        }
         return ResponseEntity.ok(eventoService.guardarEvento(evento));
     }
 

@@ -15,11 +15,15 @@ public class EntradaProducer {
     private final RabbitTemplate rabbitTemplate;
 
     public void enviarEntradaComprada(Evento evento) {
-        rabbitTemplate.convertAndSend(
-            RabbitMQConfig.COLA_EXCHANGE,
-            RabbitMQConfig.ROUTING_KEY_EVENTOS,
-            evento
-        );
-        System.out.println("Mensaje enviado a RabbitMQ");
+        try {
+            rabbitTemplate.convertAndSend(
+                RabbitMQConfig.COLA_EXCHANGE,
+                RabbitMQConfig.ROUTING_KEY_EVENTOS,
+                evento
+            );
+            System.out.println("Mensaje enviado a RabbitMQ");
+        } catch (Exception e) {
+            System.err.println("Error al enviar mensaje a RabbitMQ (RabbitMQ podría estar apagado): " + e.getMessage());
+        }
     }
 }

@@ -89,4 +89,7 @@ public class Evento {
     @NotNull
     @Positive
     private Double precioEntrada;
+
+    @Column(name = "organizador_id", nullable = true)
+    private Long organizadorId;
 }
