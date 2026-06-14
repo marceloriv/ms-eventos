@@ -3,6 +3,10 @@ package com.ticketti.ms_eventos.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -27,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v0/Eventos")
 @RequiredArgsConstructor
+@Tag(name = "Eventos", description = "Operaciones CRUD sobre eventos")
 public class EventoController {
 
     private final EventoService eventoService;
@@ -34,6 +39,11 @@ public class EventoController {
     /**
      * Guarda un nuevo evento.
      */
+    @Operation(summary = "Crear un nuevo evento")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Evento creado"),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida")
+    })
     @PostMapping("/crear")
     public ResponseEntity<Evento> save(@Valid @RequestBody Evento evento) {
         return ResponseEntity.ok(eventoService.guardarEvento(evento));
@@ -42,6 +52,11 @@ public class EventoController {
     /**
      * Lista todos los eventos.
      */
+    @Operation(summary = "Listar todos los eventos")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de eventos"),
+            @ApiResponse(responseCode = "204", description = "Sin contenido")
+    })
     @GetMapping("/listarEventos")
     public ResponseEntity<List<Evento>> findAll() {
         List<Evento> eventos = eventoService.listarEventos();
@@ -54,6 +69,12 @@ public class EventoController {
     /**
      * Actualiza un evento existente, por Id.
      */
+    @Operation(summary = "Actualizar un evento por id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Evento actualizado"),
+            @ApiResponse(responseCode = "404", description = "Evento no encontrado"),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Evento> updateEvento(@PathVariable Integer id, @Valid @RequestBody Evento evento) {
         evento.setId(id);
@@ -64,6 +85,11 @@ public class EventoController {
     /**
      * Elimina un evento por su ID.
      */
+    @Operation(summary = "Eliminar un evento por id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Evento eliminado"),
+            @ApiResponse(responseCode = "404", description = "Evento no encontrado")
+    })
     @DeleteMapping("/eliminarEvento/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
         eventoService.eliminarEvento(id);
@@ -73,17 +99,23 @@ public class EventoController {
     /**
      * Busca un evento por su ID.
      */
-    @GetMapping("/buscarEvento/{id}")
-    public ResponseEntity<Evento> findById(@PathVariable Integer id) {
+        @Operation(summary = "Buscar evento por id")
+        @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Evento encontrado"),
+            @ApiResponse(responseCode = "404", description = "Evento no encontrado")
+        })
+        @GetMapping("/buscarEvento/{id}")
+        public ResponseEntity<Evento> findById(@PathVariable Integer id) {
         return eventoService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+        }
 
     /**
      * Método para que cuando se compre una entrada, se reste del stock. Este
      * método es consumido por RabbitMQ y por lógica.
      */
+    @Operation(summary = "Método para que cuando se compre una entrada, se reste del stock")
     @PutMapping("/actualizarStock/{id}/{cantidad}")
     public ResponseEntity<Void> actualizarStock(@PathVariable Integer id, @PathVariable Integer cantidad) {
         eventoService.actualizarStock(id, cantidad);
@@ -93,6 +125,7 @@ public class EventoController {
     /**
      * Método para restaurar stock cuando se libera una reserva.
      */
+    @Operation(summary = "Método para restaurar stock cuando se libera una reserva")
     @PutMapping("/restaurarStock/{id}/{cantidad}")
     public ResponseEntity<Void> restaurarStock(@PathVariable Integer id, @PathVariable Integer cantidad) {
         eventoService.restaurarStock(id, cantidad);
@@ -102,6 +135,7 @@ public class EventoController {
     /**
      * Revisa el stock de un evento.
      */
+    @Operation(summary = "Revisa el stock de un evento")
     @GetMapping("/stock/{check}")
     public String revisarStock() {
         return eventoService.revisarStock();
@@ -109,6 +143,7 @@ public class EventoController {
 
     // GET para buscar por genero, nombre y ubicación.
     @GetMapping("/buscar")
+    @Operation(summary = "Buscar evento por genero, nombre o ubicación")
     public ResponseEntity<List<Evento>> buscar(
             @RequestParam(required = false) Genero genero,
             @RequestParam(required = false) String nombre,
@@ -125,6 +160,7 @@ public class EventoController {
      * Cancelación sólo Organizador.
     */ 
     @PutMapping("/{id}/estado")
+    @Operation(summary = "Cambia el estado del evento (publicado, cancelado)")
     public ResponseEntity<Void> cambiarEstado(
             @PathVariable Integer id,
             @RequestParam String estado) {
