@@ -23,4 +23,7 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
                         @Param("genero") Genero genero,
                         @Param("nombre") String nombre,
                         @Param("ubicacion") String ubicacion);
+
+        // Listar eventos de un organizador específico
+        List<Evento> findByOrganizadorId(Long organizadorId);
 }
