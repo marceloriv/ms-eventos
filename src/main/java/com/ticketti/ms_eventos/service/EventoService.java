@@ -43,6 +43,14 @@ public class EventoService {
     }
 
     /**
+     * Lista eventos por organizador.
+     */
+    public List<Evento> listarPorOrganizador(Long organizadorId) {
+        if (organizadorId == null) return List.of();
+        return eventoRepository.findByOrganizadorId(organizadorId);
+    }
+
+    /**
      * Actualiza un evento existente.
      * fix: se podía poner más stock que aforo, ahora no.
      */

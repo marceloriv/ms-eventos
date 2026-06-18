@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +52,19 @@ public class EventoController {
     @GetMapping("/listarEventos")
     public ResponseEntity<List<Evento>> findAll() {
         List<Evento> eventos = eventoService.listarEventos();
+        if (eventos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(eventos);
+    }
+
+    /**
+     * Listar eventos del organizador autenticado.
+     */
+    @GetMapping("/mis")
+    public ResponseEntity<List<Evento>> listarMisEventos(
+            @RequestHeader(value = "X-Usuario-Id", required = false) Long usuarioId) {
+        List<Evento> eventos = eventoService.listarPorOrganizador(usuarioId);
         if (eventos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
