@@ -61,7 +61,7 @@ public class Evento {
      *                 en cascada, porque sino, hibernate corre evento sin primero
      *                 ir a guardar un recinto.
      */
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Recinto recinto;
     // private Recinto recinto;
 
