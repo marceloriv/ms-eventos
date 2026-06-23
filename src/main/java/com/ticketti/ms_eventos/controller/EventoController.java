@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -65,17 +66,12 @@ public class EventoController {
     }
 
     /**
-     * Lista los eventos del organizador autenticado.
-     * El BFF extrae el usuarioId del JWT y lo envía en el header X-Usuario-Id.
+     * Listar eventos del organizador autenticado.
      */
     @GetMapping("/mis")
-    public ResponseEntity<List<Evento>> findMisEventos(
-            @RequestHeader(value = "X-Usuario-Id", required = false) Long organizadorId
-    ) {
-        if (organizadorId == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        List<Evento> eventos = eventoService.listarMisEventos(organizadorId);
+    public ResponseEntity<List<Evento>> listarMisEventos(
+            @RequestHeader(value = "X-Usuario-Id", required = false) Long usuarioId) {
+        List<Evento> eventos = eventoService.listarPorOrganizador(usuarioId);
         if (eventos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

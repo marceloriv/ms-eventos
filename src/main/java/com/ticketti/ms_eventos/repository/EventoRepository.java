@@ -27,12 +27,6 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
                         @Param("nombre") String nombre,
                         @Param("ubicacion") String ubicacion);
 
-        @EntityGraph(attributePaths = {"recinto"})
-        Optional<Evento> findById(Integer id);
-
-        @EntityGraph(attributePaths = {"recinto"})
-        List<Evento> findAll();
-
-        @EntityGraph(attributePaths = {"recinto"})
+        // Listar eventos de un organizador específico
         List<Evento> findByOrganizadorId(Long organizadorId);
 }

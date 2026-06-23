@@ -51,9 +51,10 @@ public class EventoService {
     }
 
     /**
-     * Lista los eventos de un organizador específico.
+     * Lista eventos por organizador.
      */
-    public List<Evento> listarMisEventos(Long organizadorId) {
+    public List<Evento> listarPorOrganizador(Long organizadorId) {
+        if (organizadorId == null) return List.of();
         return eventoRepository.findByOrganizadorId(organizadorId);
     }
 
