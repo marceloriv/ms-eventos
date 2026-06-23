@@ -32,4 +32,7 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
         @EntityGraph(attributePaths = {"recinto"})
         List<Evento> findAll();
+
+        @EntityGraph(attributePaths = {"recinto"})
+        List<Evento> findByOrganizadorId(Long organizadorId);
 }

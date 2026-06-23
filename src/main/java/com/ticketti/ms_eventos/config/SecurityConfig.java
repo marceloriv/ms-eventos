@@ -48,6 +48,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v0/Eventos/buscarEvento/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v0/Eventos/buscar").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v0/Eventos/stock/**").permitAll()
+                        // Eventos del organizador autenticado
+                        .requestMatchers(HttpMethod.GET, "/api/v0/Eventos/mis").authenticated()
                         // Modificación de stock (consumido por ms-carrito internamente con JWT)
                         .requestMatchers(HttpMethod.PUT, "/api/v0/Eventos/actualizarStock/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/v0/Eventos/restaurarStock/**").authenticated()

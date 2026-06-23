@@ -14,7 +14,9 @@ import com.ticketti.ms_eventos.repository.EventoRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,10 +31,16 @@ public class EventoService {
      * fix: se podía poner más stock que aforo, ahora no.
      */
     public Evento guardarEvento(Evento evento) {
+        log.debug("Guardando evento: nombre='{}', aforo={}, stock={}, precioEntrada={}",
+                evento.getNombre(), evento.getAforo(), evento.getStock(), evento.getPrecioEntrada());
         if (evento.getStock() > evento.getAforo()) {
+            log.warn("Validación fallida: stock ({}) > aforo ({}) para evento '{}'",
+                    evento.getStock(), evento.getAforo(), evento.getNombre());
             throw new IllegalArgumentException("El stock no puede ser mayor al aforo");
         }
-        return eventoRepository.save(evento);
+        Evento guardado = eventoRepository.save(evento);
+        log.info("Evento persistido: id={}, nombre='{}'", guardado.getId(), guardado.getNombre());
+        return guardado;
     }
 
     /**
@@ -40,6 +48,13 @@ public class EventoService {
      */
     public List<Evento> listarEventos() {
         return eventoRepository.findAll();
+    }
+
+    /**
+     * Lista los eventos de un organizador específico.
+     */
+    public List<Evento> listarMisEventos(Long organizadorId) {
+        return eventoRepository.findByOrganizadorId(organizadorId);
     }
 
     /**

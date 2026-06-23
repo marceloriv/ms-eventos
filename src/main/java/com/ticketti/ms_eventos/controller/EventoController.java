@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketti.ms_eventos.model.Evento;
@@ -20,10 +21,12 @@ import com.ticketti.ms_eventos.service.EventoService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controlador REST para operaciones CRUD de Eventos.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/v0/Eventos")
 @RequiredArgsConstructor
@@ -37,12 +40,16 @@ public class EventoController {
     @PostMapping("/crear")
     public ResponseEntity<Evento> save(
             @Valid @RequestBody Evento evento,
-            @org.springframework.web.bind.annotation.RequestHeader(value = "X-Usuario-Id", required = false) Long organizadorId
+            @RequestHeader(value = "X-Usuario-Id", required = false) Long organizadorId
     ) {
+        log.info("Solicitud de creación de evento: nombre='{}', genero='{}', organizadorId={}",
+                evento.getNombre(), evento.getGenero(), organizadorId);
         if (organizadorId != null) {
             evento.setOrganizadorId(organizadorId);
         }
-        return ResponseEntity.ok(eventoService.guardarEvento(evento));
+        Evento creado = eventoService.guardarEvento(evento);
+        log.info("Evento creado exitosamente: id={}, nombre='{}'", creado.getId(), creado.getNombre());
+        return ResponseEntity.ok(creado);
     }
 
     /**
@@ -51,6 +58,24 @@ public class EventoController {
     @GetMapping("/listarEventos")
     public ResponseEntity<List<Evento>> findAll() {
         List<Evento> eventos = eventoService.listarEventos();
+        if (eventos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(eventos);
+    }
+
+    /**
+     * Lista los eventos del organizador autenticado.
+     * El BFF extrae el usuarioId del JWT y lo envía en el header X-Usuario-Id.
+     */
+    @GetMapping("/mis")
+    public ResponseEntity<List<Evento>> findMisEventos(
+            @RequestHeader(value = "X-Usuario-Id", required = false) Long organizadorId
+    ) {
+        if (organizadorId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<Evento> eventos = eventoService.listarMisEventos(organizadorId);
         if (eventos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
