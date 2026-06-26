@@ -35,6 +35,7 @@ services:
   db:
     image: mysql:8.4
     container_name: ms-eventos-mysql
+    command: ["mysqld", "--authentication-policy=caching_sha2_password,,"]
     restart: unless-stopped
     networks:
       - ticketti-network
@@ -47,7 +48,6 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ../mysql-custom.cnf:/etc/mysql/conf.d/custom.cnf:ro
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 10s
