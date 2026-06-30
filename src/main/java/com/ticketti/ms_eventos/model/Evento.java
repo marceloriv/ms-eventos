@@ -92,4 +92,13 @@ public class Evento {
 
     @Column(name = "organizador_id", nullable = true)
     private Long organizadorId;
+
+    // Referencia logica a CausaSocial en MS-Donaciones (sin FK real, otro
+    // microservicio/BD). Obligatoria por regla de negocio: todo evento debe
+    // tener una causa social. La columna se deja nullable=true para no
+    // romper eventos ya existentes via ddl-auto=update; lo obligatorio se
+    // exige con @NotNull, validado en el controller con @Valid.
+    @Column(name = "causa_social_id", nullable = true)
+    @NotNull
+    private Long causaSocialId;
 }
