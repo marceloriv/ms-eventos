@@ -92,4 +92,9 @@ public class Evento {
 
     @Column(name = "organizador_id", nullable = true)
     private Long organizadorId;
+
+    // Referencia lógica a CausaSocial en MS-Donaciones (sin FK real).
+    // Opcional: el comprador elige la causa en el carrito (RF-4.2).
+    @Column(name = "causa_social_id", nullable = true)
+    private Long causaSocialId;
 }
