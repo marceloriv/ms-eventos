@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketti.ms_eventos.model.Evento;
@@ -147,10 +146,10 @@ public class EventoController {
         return ResponseEntity.ok(eventos);
     }
 
-    /** 
-     * Cambia el estado del evento (publicado, cancelado). 
+    /**
+     * Cambia el estado del evento (publicado, cancelado).
      * Cancelación sólo Organizador.
-    */ 
+    */
     @PutMapping("/{id}/estado")
     public ResponseEntity<Void> cambiarEstado(
             @PathVariable Integer id,

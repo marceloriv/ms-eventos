@@ -11,9 +11,6 @@ import org.springframework.stereotype.Repository;
 import com.ticketti.ms_eventos.model.Evento;
 import com.ticketti.ms_eventos.model.Genero;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
